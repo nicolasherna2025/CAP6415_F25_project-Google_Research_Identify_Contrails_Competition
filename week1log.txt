@@ -1,1 +1,41 @@
-Prueba
+CAP6415_F25 PROJECT
+WEEK 1 LOG
+
+
+Project: Participate in Kaggle Competition “Google Research - Identify Contrails to Reduce Global Warming”
+
+
+The first week consisted in creating the github account and the repository for the project, understanding the goal problem and the goal of the competition, searching for the context of the competition researching about contrails, how they are detected and why it is important to have computer vision models to detect them. Finally, understanding the dataset provided and visualizing the images. 
+
+
+1. Github Repository: 
+2. Understand problem and project goals
+Goal of competition: Train ML models to identify contrails in satellite images and help prevent their formation.
+Context:
+The impact non CO2 emissions from airplanes remains a topic that requires study, and one of those effects are contrails (condensation trails), which are long, thin cirrus clouds that appear after an aircraft flies in humid areas. Some of these contrails can linger and grow for several hours, occasionally merging into cloud formations that become visually identical to naturally occurring cirrus, making them difficult to detect. These clouds have a climate impact by changing our planet’s radiative balance. It could locally have a cooling or a warming effect, by reflecting incoming solar radiation or trapping outgoing thermal radiation emitted by the earth.[1]
+
+
+3. Understand dataset:
+The challenge provides geostationary satellite images retrieved from the GOES-16 Advanced Baseline Imager (ABI). The train data consists of multiple sequences of images with one main labeled image to have a temporal context and have better performance, so the challenge provides a sequence of images at 10-minute intervals, 4 before the labeled image and 3 after. For each of these sequences, there are different folders that represent bands, these represent the infrared channel at different wavelengths and are converted to brightness temperatures. 
+The ground truth was determined by 4+ different labelers annotating each image. Pixels were considered a contrail when >50% of the labelers annotated it as such. [2]
+
+
+4. Visualize images:
+To better understand the dataset and to know how to manipulate it, several images of the dataset were plotted in  a notebook, using example code provided [5]. 
+
+
+
+[1] Chevallier, R., Shapiro, M., Engberg, Z., Soler, M., & Delahaye, D. (2023). Linear Contrails Detection, Tracking and Matching with Aircraft Using Geostationary Satellite and Air Traffic Data. Aerospace, 10(7), 578. https://doi.org/10.3390/aerospace10070578
+
+
+[2] Formatted Reference (APA-like Style)
+Schumann, U. (2005). Formation, properties and climatic effects of contrails. Comptes Rendus Physique, 6(4), 549–565. https://www.sciencedirect.com/science/article/pii/S1631070505000563
+
+
+[3] Ng, J., Elkin, C., Sarna, A., Reade, W., & Demkin, M. (2023). Google Research - Identify Contrails to Reduce Global Warming [Kaggle Competition Dataset]. Kaggle. https://kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming
+
+
+[4] Ng, J. Y.-H., McCloskey, K., Cui, J., Meijer, V. R., Brand, E., Sarna, A., Goyal, N., Van Arsdale, C., & Geraedts, S. (2023). OpenContrails: Benchmarking Contrail Detection on GOES-16 ABI. arXiv preprint arXiv:2304.02122. https://arxiv.org/abs/2304.02122
+
+
+[5] Inversion. Ng, Joe. (2023). Visualizing Contrails [Source code]. Kaggle. https://www.kaggle.com/code/inversion/visualizing-contrails
