@@ -8,7 +8,7 @@ Project: Participate in Kaggle Competition “Google Research - Identify Contrai
 The first week consisted in creating the github account and the repository for the project, understanding the goal problem and the goal of the competition, searching for the context of the competition researching about contrails, how they are detected and why it is important to have computer vision models to detect them. Finally, understanding the dataset provided and visualizing the images. 
 
 
-1. Github Repository: 
+1. Github Repository: https://github.com/nicolasherna2025/CAP6415_F25_project-Google_Research_Identify_Contrails_Competition 
 2. Understand problem and project goals
 Goal of competition: Train ML models to identify contrails in satellite images and help prevent their formation.
 Context:
