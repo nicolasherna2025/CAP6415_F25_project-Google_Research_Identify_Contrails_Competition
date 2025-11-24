@@ -1,0 +1,88 @@
+﻿CAP6415_F25 PROJECT
+WEEK 3 LOG
+
+
+Project: Participate in Kaggle Competition “Google Research - Identify Contrails to Reduce Global Warming”
+
+
+The third week consisted of working with the data set to get it ready to implement a 3D convolutional neural network, and perform a first test using a simple network to get some first results. 
+
+
+The data in kaggle consists of a training folder with 20.5k folders representing record id, for each record id, there are 9 folders for each band (band_08 to band_16) and each band folder contains an array (256, 256, 8). These are sequences of 8 images of size 256x256 representing temporal context, like a video. Each record id also holds a human_pixel_masks.npy, which is an array (H, W, 1) that is the per pixel binary ground truth. 
+
+
+Accomplishments during this week included loading the data set, and transforming the data set into necessary pytorch tensors of shape (C,T,H,W) -> (9, 8, 256, 256). This was done inside the class torch.utils.data.Dataset to later use the Dataloader, to train with batches.
+
+
+For a first test I implemented a simple 3D CNN of an encoder decoder:
+Encoder:
+* Conv3D (in=9, out=16, kernel=3)
+* BatchNorm3D
+* ReLU
+* Conv3D (in=16, out=16, kernel=3)
+* BatchNorm3D
+* ReLU  
+Output: (4, 16, 8, 256, 256)
+
+
+Temporal Collapse:
+torch.mean(x, dim=2)
+Output: (4, 16, 128, 128)
+
+
+Decoder:
+* Conv2D (16 → 32)
+* BatchNorm2D
+* ReLU
+* Conv2D (32 → 16)
+* BatchNorm2D
+* ReLU
+* Conv2D (16 → 1, kernel=1)
+Output: (4, 1, 128, 128)
+
+
+Loss function: BCEWithLogitsLoss
+
+
+Model was evaluated on the global Dice coefficient
+
+
+
+
+References
+
+
+[1] Chevallier, R., Shapiro, M., Engberg, Z., Soler, M., & Delahaye, D. (2023). Linear Contrails Detection, Tracking and Matching with Aircraft Using Geostationary Satellite and Air Traffic Data. Aerospace, 10(7), 578. https://doi.org/10.3390/aerospace10070578
+
+
+[2] Ng, J. Y.-H., McCloskey, K., Cui, J., Meijer, V. R., Brand, E., Sarna, A., Goyal, N., Van Arsdale, C., & Geraedts, S. (2023). OpenContrails: Benchmarking Contrail Detection on GOES-16 ABI. arXiv preprint arXiv:2304.02122. https://arxiv.org/abs/2304.02122
+
+
+[3] V. R. Meijer, L. Kulik, S. D. Eastham, F. Allroggen, R. L. Speth, S. Karaman, and S. R. Barrett, “Contrail coverage over the united states before and during the covid-19 pandemic,” Environmental Research Letters, vol. 17, no. 3, p. 034039, 2022. 
+
+
+[4] G. Zhang, J. Zhang, and J. Shang, “Contrail recognition with convolutional neural network and contrail parameterizations evaluation,” SOLA, vol. 14, pp. 132–137, 2018.
+
+
+[5] L.-C. Chen, G. Papandreou, F. Schroff, and H. Adam, “Rethinking atrous convolution for semantic image segmentation,” arXiv preprint arXiv:1706.05587, 2017.
+
+
+[6] L.-C. Chen, Y. Zhu, G. Papandreou, F. Schroff, and H. Adam, “Encoderdecoder with atrous separable convolution for semantic image segmentation,” in Proceedings of the European conference on computer vision (ECCV), 2018, pp. 801–818
+
+
+[7] L. Kulik, “Satellite-based detection of contrails using deep learning,” Ph.D. dissertation, Massachusetts Institute of Technology, 2019.
+
+
+[8] Csurka, G., Volpi, R., & Chidlovskii, B. (2023). Semantic image segmentation: Two decades of research. arXiv. https://arxiv.org/abs/2302.06378
+
+
+[9] Usharengaraju. (n.d.). SemanticSegmentationUsingViTs [Code notebook]. Kaggle. https://www.kaggle.com/code/usharengaraju/semanticsegmentationusingvits
+
+
+[10] Liu, T., Huang, J., & Weng, C. (2024). Spatio-temporal encoding and decoding-based method for future human activity skeleton synthesis. arXiv. https://arxiv.org/abs/2407.05573
+
+
+[11] TensorFlow Hub. (n.d.). Action recognition with TF-Hub [Tutorial]. TensorFlow. https://www.tensorflow.org/hub/tutorials/action_recognition_with_tf_hub 
+
+
+[12] TensorFlow. (n.d.). Image segmentation [Tutorial]. TensorFlow. https://www.tensorflow.org/tutorials/images/segmentation
