@@ -46,8 +46,12 @@ Loss function: BCEWithLogitsLoss
 
 Model was evaluated on the global Dice coefficient
 
+Results:
+Final Validation Results
+Loss: 0.03540554323538753
+Dice: 0.25215517715749347
 
-
+To do: research algorithms ato improve model, like a 3D U-Net, use ViTs, add temporal attention.
 
 References
 
@@ -83,6 +87,7 @@ References
 
 
 [11] TensorFlow Hub. (n.d.). Action recognition with TF-Hub [Tutorial]. TensorFlow. https://www.tensorflow.org/hub/tutorials/action_recognition_with_tf_hub 
+
 
 
 [12] TensorFlow. (n.d.). Image segmentation [Tutorial]. TensorFlow. https://www.tensorflow.org/tutorials/images/segmentation
