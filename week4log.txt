@@ -1,0 +1,177 @@
+﻿CAP6415_F25 PROJECT
+WEEK 4 LOG
+
+
+Project: Participate in Kaggle Competition “Google Research - Identify Contrails to Reduce Global Warming”
+
+
+After the implementation of the 3D CNN of an encoder decoder, there was a meeting during the week with TA Zarif that guided me to 3D U-Nets that is widely used for 3D image segmentation. The 3D U-Net consists of 3D convolutional layers and a symmetrical encoder-decoder structure with skip connections to segment volumetric data. In this project the 3D data is provided by the temporal information. For this project, instead of just doing the 3D convolutions in the bottle neck of the U-Net, to better process temporal context,  a ConvLSTM model was used to model temporal evolution of contrail formation so the model learns how features evolve over time.
+Trained for 8 epochs (3.5 hours running approx), the estimated Leaderboard Score (Global Dice): 0.52979.
+
+
+After that, I implemented the same U-Net model but changed the bottle neck to a ViT to use multi-head attention to model long-range spatial dependencies and learn relationships between all regions of the image. In this application the "Patching" and "Embedding" steps of a ViT are inferred in the encoder part of the 3D U-Net before the data even reaches the ViT. An important algorithm used was factorized ViT [22] where attention is applied over space and then attention over time separately. This captures the same info but is much faster and lighter. Trained for 8 epochs (4 hours running approx), the estimated Leaderboard Score (Global Dice): 0.468.
+
+
+One reason why LSTM may have worked better than ViT is because the data provided is a sequencetime that could be better modeled with recurrence, soLSTM would be better suited for tracking moving lines like the contrails. Another reason could be that for ViT to work better requires a larger data set.
+
+
+LSTM in the bottle neck
+
+
+Encoder
+Level 1
+Conv3D (in=3, out=16, kernel=3, padding=1)
+Conv3D (in=16, out=16, kernel=3, padding=1)
+Output: (B, 16, 8, 256, 256)
+MaxPool3D (kernel=(1,2,2))
+Output: (B, 16, 8, 128, 128)
+Level 2
+Conv3D (in=16, out=32, kernel=3, padding=1)
+Conv3D (in=32, out=32, kernel=3, padding=1)
+Output: (B, 32, 8, 128, 128)
+MaxPool3D (kernel=(1,2,2))
+Output: (B, 32, 8, 64, 64)
+Level 3
+Conv3D (in=32, out=64, kernel=3, padding=1)
+Conv3D (in=64, out=64, kernel=3, padding=1)
+Output: (B, 64, 8, 64, 64)
+MaxPool3D (kernel=(1,2,2))
+Output: (B, 64, 8, 32, 32)
+
+
+Bottleneck (ConvLSTM)
+Conv3D (in=64, out=64, kernel=1)
+Reshape to: (B, 8, 64, 32, 32)
+
+
+ConvLSTM (input_channels=64, hidden_channels=128):
+Each ConvLSTM cell: Conv2D (in=64 + 128 → 4×128, kernel=3, padding=1)
+Hidden state updated across 8 timesteps
+Output sequence: (B, 8, 128, 32, 32)
+Final hidden state: (B, 128, 32, 32)
+
+
+Decoder
+Level 3
+ConvTranspose3D (in=128, out=64, kernel=(1,2,2), stride=(1,2,2))
+Output: (B, 64, 8, 64, 64)
+Concatenate with Encoder Level 3 skip:
+Concat: (64 + 64 = 128)
+Conv3D (in=128, out=64, kernel=3, padding=1)
+Conv3D (in=64, out=64, kernel=3, padding=1)
+Output: (B, 64, 8, 64, 64)
+
+
+Up Level 2
+ConvTranspose3D (in=64, out=32, kernel=(1,2,2), stride=(1,2,2))
+Output: (B, 32, 8, 128, 128)
+Concatenate with Encoder Level 2 skip:
+Concat: (32 + 32 = 64)
+Conv3D (in=64, out=32, kernel=3, padding=1)
+Conv3D (in=32, out=32, kernel=3, padding=1)
+Output: (B, 32, 8, 128, 128)
+
+
+Up Level 1
+ConvTranspose3D (in=32, out=16, kernel=(1,2,2), stride=(1,2,2))
+Output: (B, 16, 8, 256, 256)
+Concatenate with Encoder Level 1 skip:
+Concat: (16 + 16 = 32)
+Conv3D (in=32, out=16, kernel=3, padding=1)
+Conv3D (in=16, out=16, kernel=3, padding=1)
+Output: (B, 16, 8, 256, 256)
+
+
+Temporal Collapse
+torch.mean(x, dim=2)
+(average over temporal dimension T=8)
+Output: (B, 16, 256, 256)
+
+
+Final Segmentation Layer
+Conv2D (in=16, out=1, kernel=1)
+Output: (B, 1, 256, 256)
+
+
+Loss Function
+Combined loss:
+0.5 × BCEWithLogitsLoss + 0.5 × Dice Loss
+
+
+
+
+ViT in the bottle neck
+
+
+Bottleneck (ViT)
+1. Spatial Attention (Over H,W): 
+Reshape: (B×8, 1024, 64) [Sequence Length=32×32=1024] 
+Add Spatial Positional Embedding TransformerEncoder (d_model=64, nhead=4, layers=2) 
+Output: (B×8, 1024, 64)
+
+
+2. Temporal Attention (Over T): 
+Reshape: (B×1024, 8, 64) [Sequence Length=8] 
+Add Temporal Positional Embedding TransformerEncoder (d_model=64, nhead=4, layers=2) 
+Output: (B×1024, 8, 64)
+
+
+3. Reconstruction & Projection: 
+Reshape to: (B, 64, 8, 32, 32) 
+Projection Layer: Conv3D (in=64, out=128, kernel=1) 
+Output: (B, 128, 8, 32, 32)
+
+
+
+
+References
+
+
+[1] Chevallier, R., Shapiro, M., Engberg, Z., Soler, M., & Delahaye, D. (2023). Linear Contrails Detection, Tracking and Matching with Aircraft Using Geostationary Satellite and Air Traffic Data. Aerospace, 10(7), 578. https://doi.org/10.3390/aerospace10070578
+
+
+[2] Ng, J. Y.-H., McCloskey, K., Cui, J., Meijer, V. R., Brand, E., Sarna, A., Goyal, N., Van Arsdale, C., & Geraedts, S. (2023). OpenContrails: Benchmarking Contrail Detection on GOES-16 ABI. arXiv preprint arXiv:2304.02122. https://arxiv.org/abs/2304.02122
+
+
+[3] V. R. Meijer, L. Kulik, S. D. Eastham, F. Allroggen, R. L. Speth, S. Karaman, and S. R. Barrett, “Contrail coverage over the united states before and during the covid-19 pandemic,” Environmental Research Letters, vol. 17, no. 3, p. 034039, 2022. 
+
+
+[4] G. Zhang, J. Zhang, and J. Shang, “Contrail recognition with convolutional neural network and contrail parameterizations evaluation,” SOLA, vol. 14, pp. 132–137, 2018.
+
+
+[5] L.-C. Chen, G. Papandreou, F. Schroff, and H. Adam, “Rethinking atrous convolution for semantic image segmentation,” arXiv preprint arXiv:1706.05587, 2017.
+
+
+[6] L.-C. Chen, Y. Zhu, G. Papandreou, F. Schroff, and H. Adam, “Encoderdecoder with atrous separable convolution for semantic image segmentation,” in Proceedings of the European conference on computer vision (ECCV), 2018, pp. 801–818
+
+
+[7] L. Kulik, “Satellite-based detection of contrails using deep learning,” Ph.D. dissertation, Massachusetts Institute of Technology, 2019.
+
+
+[8] Csurka, G., Volpi, R., & Chidlovskii, B. (2023). Semantic image segmentation: Two decades of research. arXiv. https://arxiv.org/abs/2302.06378
+
+
+[9] Usharengaraju. (n.d.). SemanticSegmentationUsingViTs [Code notebook]. Kaggle. https://www.kaggle.com/code/usharengaraju/semanticsegmentationusingvits
+
+
+[10] Liu, T., Huang, J., & Weng, C. (2024). Spatio-temporal encoding and decoding-based method for future human activity skeleton synthesis. arXiv. https://arxiv.org/abs/2407.05573
+
+
+[11] TensorFlow Hub. (n.d.). Action recognition with TF-Hub [Tutorial]. TensorFlow. https://www.tensorflow.org/hub/tutorials/action_recognition_with_tf_hub 
+
+
+[12] TensorFlow. (n.d.). Image segmentation [Tutorial]. TensorFlow. https://www.tensorflow.org/tutorials/images/segmentation
+[13] Çiçek, Ö., Abdulkadir, A., Lienkamp, S. S., Brox, T., & Ronneberger, O. (2016). 3D U-Net: Learning dense volumetric segmentation from sparse annotation. arXiv. https://arxiv.org/abs/1606.06650
+[14] Ronneberger, O., Fischer, P., & Brox, T. (2015). U-Net: Convolutional networks for biomedical image segmentation. arXiv. https://arxiv.org/abs/1505.04597
+[15] Shi, X., Chen, Z., Wang, H., Yeung, D.-Y., Wong, W.-k., & Woo, W.-c. (2015). Convolutional LSTM network: A machine learning approach for precipitation nowcasting. arXiv. https://arxiv.org/abs/1506.04214
+[16] Naylor, P. (2018). 3D U-Net in PyTorch [Code repository]. GitHub. https://github.com/black0017/MedicalZooPytorch
+ (Structure inspiration for 3D U-Net encoder–decoder patterns.)
+[17] Aghdam, A. (2024). 3D-UNet (PyTorch implementation) [Code repository]. GitHub. https://github.com/amir-aghdam/3D-UNet
+[18] Wen, Q. (2020). ConvLSTM PyTorch implementation [Code repository]. GitHub.
+ https://github.com/ndrplz/ConvLSTM_pytorch
+[19] Kaggle. (2023). Identify contrails dataset utilities [Notebook]. Kaggle.
+https://www.kaggle.com/competitions/google-research-identify-contrails-to-reduce-global-warming
+[20] LearnOpenCV. (2020). 3D U-Net for BRATS: Implementation & Tutorial. LearnOpenCV. https://learnopencv.com/3d-u-net-brats/
+[21] Bertasius, G., Wang, H., & Torresani, L. (2021). Is Space-Time Attention All You Need for Video Understanding? (TimeSformer). arXiv:2102.05095. https://arxiv.org/abs/2102.05095
+[22] Arnab, A., Dehghani, M., et al. (2021). ViViT: A Video Vision Transformer. arXiv:2103.15691. https://arxiv.org/abs/2103.15691
+[23] Dosovitskiy, A., et al. (2021). An Image is Worth 16×16 Words: Transformers for Image Recognition at Scale (ViT). ICLR. https://arxiv.org/abs/2010.11929
