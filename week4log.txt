@@ -106,16 +106,12 @@ ViT in the bottle neck
 Bottleneck (ViT)
 1. Spatial Attention (Over H,W): 
 Reshape: (B×8, 1024, 64) [Sequence Length=32×32=1024] 
-Add Spatial Positional Embedding TransformerEncoder (d_model=64, nhead=4, layers=2) 
+Spatial Positional Embedding TransformerEncoder (d_model=64, nhead=4, layers=2) 
 Output: (B×8, 1024, 64)
-
-
 2. Temporal Attention (Over T): 
 Reshape: (B×1024, 8, 64) [Sequence Length=8] 
-Add Temporal Positional Embedding TransformerEncoder (d_model=64, nhead=4, layers=2) 
+Temporal Positional Embedding TransformerEncoder (d_model=64, nhead=4, layers=2) 
 Output: (B×1024, 8, 64)
-
-
 3. Reconstruction & Projection: 
 Reshape to: (B, 64, 8, 32, 32) 
 Projection Layer: Conv3D (in=64, out=128, kernel=1) 
@@ -128,38 +124,16 @@ References
 
 
 [1] Chevallier, R., Shapiro, M., Engberg, Z., Soler, M., & Delahaye, D. (2023). Linear Contrails Detection, Tracking and Matching with Aircraft Using Geostationary Satellite and Air Traffic Data. Aerospace, 10(7), 578. https://doi.org/10.3390/aerospace10070578
-
-
 [2] Ng, J. Y.-H., McCloskey, K., Cui, J., Meijer, V. R., Brand, E., Sarna, A., Goyal, N., Van Arsdale, C., & Geraedts, S. (2023). OpenContrails: Benchmarking Contrail Detection on GOES-16 ABI. arXiv preprint arXiv:2304.02122. https://arxiv.org/abs/2304.02122
-
-
 [3] V. R. Meijer, L. Kulik, S. D. Eastham, F. Allroggen, R. L. Speth, S. Karaman, and S. R. Barrett, “Contrail coverage over the united states before and during the covid-19 pandemic,” Environmental Research Letters, vol. 17, no. 3, p. 034039, 2022. 
-
-
 [4] G. Zhang, J. Zhang, and J. Shang, “Contrail recognition with convolutional neural network and contrail parameterizations evaluation,” SOLA, vol. 14, pp. 132–137, 2018.
-
-
 [5] L.-C. Chen, G. Papandreou, F. Schroff, and H. Adam, “Rethinking atrous convolution for semantic image segmentation,” arXiv preprint arXiv:1706.05587, 2017.
-
-
 [6] L.-C. Chen, Y. Zhu, G. Papandreou, F. Schroff, and H. Adam, “Encoderdecoder with atrous separable convolution for semantic image segmentation,” in Proceedings of the European conference on computer vision (ECCV), 2018, pp. 801–818
-
-
 [7] L. Kulik, “Satellite-based detection of contrails using deep learning,” Ph.D. dissertation, Massachusetts Institute of Technology, 2019.
-
-
 [8] Csurka, G., Volpi, R., & Chidlovskii, B. (2023). Semantic image segmentation: Two decades of research. arXiv. https://arxiv.org/abs/2302.06378
-
-
 [9] Usharengaraju. (n.d.). SemanticSegmentationUsingViTs [Code notebook]. Kaggle. https://www.kaggle.com/code/usharengaraju/semanticsegmentationusingvits
-
-
 [10] Liu, T., Huang, J., & Weng, C. (2024). Spatio-temporal encoding and decoding-based method for future human activity skeleton synthesis. arXiv. https://arxiv.org/abs/2407.05573
-
-
 [11] TensorFlow Hub. (n.d.). Action recognition with TF-Hub [Tutorial]. TensorFlow. https://www.tensorflow.org/hub/tutorials/action_recognition_with_tf_hub 
-
-
 [12] TensorFlow. (n.d.). Image segmentation [Tutorial]. TensorFlow. https://www.tensorflow.org/tutorials/images/segmentation
 [13] Çiçek, Ö., Abdulkadir, A., Lienkamp, S. S., Brox, T., & Ronneberger, O. (2016). 3D U-Net: Learning dense volumetric segmentation from sparse annotation. arXiv. https://arxiv.org/abs/1606.06650
 [14] Ronneberger, O., Fischer, P., & Brox, T. (2015). U-Net: Convolutional networks for biomedical image segmentation. arXiv. https://arxiv.org/abs/1505.04597
