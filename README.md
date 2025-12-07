@@ -37,6 +37,16 @@ GPU <br>
 
 ## Solution
 **3D U-Net + ConvLSTM** <br>
-Proposed a Model consisting of a 3D U-Net with ConvLSTM in Bottle Neck. 3D U-Net is a model that is widely used for 3D image segmentation that consists of 3D convolutional layers and a symmetrical encoder-decoder structure with skip connections to segment volumetric data. In this project the 3D data is provided by the temporal information. Instead of just doing the 3D convolutions in the bottle neck of the U-Net, to better process temporal context, a ConvLSTM model was used to model temporal evolution of contrail formation so the model learns how features evolve over time.
+Proposed a Model consisting of a 3D U-Net with ConvLSTM in Bottle Neck. 3D U-Net is a model that is widely used for 3D image segmentation that consists of 3D convolutional layers and a symmetrical encoder-decoder structure with skip connections to segment volumetric data. In this project the 3D data is provided by the temporal information. Instead of just doing the 3D convolutions in the bottle neck of the U-Net, to better process temporal context, a ConvLSTM model was used to model temporal evolution of contrail formation so the model learns how features evolve over time.<br>
+The model was implemented in a Kaggle notebook which is necessary to be able to make a submission for the competition. The programming language used was Python and the model was implemented with Pytorch.
+#### Important references
+Original papers: 
+- Çiçek, Ö., Abdulkadir, A., Lienkamp, S. S., Brox, T., & Ronneberger, O. (2016). 3D U-Net: Learning dense volumetric segmentation from sparse annotation. arXiv. https://arxiv.org/abs/1606.06650 <br>
+- Shi, X., Chen, Z., Wang, H., Yeung, D.-Y., Wong, W.-k., & Woo, W.-c. (2015). Convolutional LSTM network: A machine learning approach for precipitation nowcasting. arXiv. https://arxiv.org/abs/1506.04214 <br>
+- LearnOpenCV. (2020). 3D U-Net for BRATS: Implementation & Tutorial. LearnOpenCV. https://learnopencv.com/3d-u-net-brats/ <br>
+Code references: 
+- LearnOpenCV. (2020). 3D U-Net for BRATS: Implementation & Tutorial. LearnOpenCV. https://learnopencv.com/3d-u-net-brats/
+- Wen, Q. (2020). ConvLSTM PyTorch implementation [Code repository]. GitHub. https://github.com/ndrplz/ConvLSTM_pytorch
+
 
 
