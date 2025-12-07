@@ -52,3 +52,5 @@ Here ypou can find the papers and code repositories used for this project
 [24] Oktay, O., et al. (2018). Attention U-Net: Learning Where to Look for the Pancreas. arXiv preprint. https://arxiv.org/abs/1804.03999
 
 [25] LeeJunHyun. (n.d.). Image_Segmentation [GitHub repository]. https://github.com/LeeJunHyun/Image_Segmentation
+
+[26] Inversion. Ng, Joe. (2023). Contrails - RLE Submission [Source code]. Kaggle. https://www.kaggle.com/code/inversion/contrails-rle-submission
