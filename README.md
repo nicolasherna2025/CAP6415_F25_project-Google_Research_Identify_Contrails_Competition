@@ -36,7 +36,7 @@ tqdm <br>
 GPU <br>
 
 ## Solution
-**3D U-Net with ConvLSTM in Bottle Neck**
+**3D U-Net + ConvLSTM** <br>
 Proposed a Model consisting of a 3D U-Net with ConvLSTM in Bottle Neck. 3D U-Net is a model that is widely used for 3D image segmentation that consists of 3D convolutional layers and a symmetrical encoder-decoder structure with skip connections to segment volumetric data. In this project the 3D data is provided by the temporal information. Instead of just doing the 3D convolutions in the bottle neck of the U-Net, to better process temporal context, a ConvLSTM model was used to model temporal evolution of contrail formation so the model learns how features evolve over time.
 
 
