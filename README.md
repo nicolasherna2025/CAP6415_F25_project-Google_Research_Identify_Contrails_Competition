@@ -49,7 +49,7 @@ https://www.kaggle.com/code/nicolashernandez1307/cap6415-contrail-project-submis
 ## Results
 ### Comparison of the different models tested
 Each one was trained for 8 epochs and evaluated using Global Dice Score. 
-<img width="847" height="251" alt="image" src="https://github.com/user-attachments/assets/75d2916c-8839-40ab-9689-864de838e848" /> <br>
+<img width="747" height="151" alt="image" src="https://github.com/user-attachments/assets/75d2916c-8839-40ab-9689-864de838e848" /> <br>
 The best performer was 3D U-Net + ConvLSTM, so I used this one for training. The model was trained for 15 epochs with a combined loss function of 0.5 × BCEWithLogitsLoss + 0.5 × Dice Loss, on Kaggle’s GPU T4 x2. Training lasts approximately 6 hours.
 ### Visualization of prediction example with no contrails
 <img width="736" height="190" alt="image" src="https://github.com/user-attachments/assets/8428489f-04aa-46c6-b14c-c689a9c6b0d5" /> <br>
