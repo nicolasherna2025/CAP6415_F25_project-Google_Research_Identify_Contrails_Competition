@@ -41,7 +41,6 @@ test/
                       band_08.npy
                       ...
                       bans_16.npy
-                      human_pixel_masks.npy
 sample_submission.csv
 train_metadata.json
 validation_metadata.json
