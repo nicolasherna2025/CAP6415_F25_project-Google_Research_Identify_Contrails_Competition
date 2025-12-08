@@ -40,14 +40,14 @@ GPU <br>
 **3D U-Net + ConvLSTM** <br>
 Proposed a Model consisting of a 3D U-Net with ConvLSTM in Bottle Neck. 3D U-Net is a model that is widely used for 3D image segmentation that consists of 3D convolutional layers and a symmetrical encoder-decoder structure with skip connections to segment volumetric data. In this project the 3D data is provided by the temporal information. Instead of just doing the 3D convolutions in the bottle neck of the U-Net, to better process temporal context, a ConvLSTM model was used to model temporal evolution of contrail formation so the model learns how features evolve over time.<br>
 The model was implemented in a Kaggle notebook which is necessary to be able to make a submission for the competition. The programming language used was Python and the model was implemented with Pytorch.<br>
-#### Training and Submission
+## Training and Submission
 The model was trained in an initial Kaggle noteebook for 15 epochs using the GPU T4 x2, using a combine loss function of 0.5 × BCEWithLogitsLoss + 0.5 × Dice Loss. Training time lasted approximately 6 hours. From there the weights were exported as a dataset to be able to use the model in a new notebook for the submission. The submission has scertain requirements, you have to submit a Kaggle notebook, GPU Notebook has to have less than 9 hours run-time, and the internet access disabled. This competition is evaluated on the global Dice coefficient, and the exact format of the submission had to be a run-length encoding on the pixel values.So, you have to submit pairs of values that contain a start position and a run length, e.g., '1 3' implies starting at pixel 1 and running a total of 3 pixels (1,2,3).<br>
 ### Training Kaggle Notebook
 https://www.kaggle.com/code/nicolashernandez1307/cap6415-contrail-project-training
 ### Submission Kaggle Notebook
+https://www.kaggle.com/code/nicolashernandez1307/cap6415-contrail-project-submission
 
-
-### Important references
+## Important references
 **Original papers:** <br>
 - Çiçek, Ö., Abdulkadir, A., Lienkamp, S. S., Brox, T., & Ronneberger, O. (2016). 3D U-Net: Learning dense volumetric segmentation from sparse annotation. arXiv. https://arxiv.org/abs/1606.06650 <br>
 - Shi, X., Chen, Z., Wang, H., Yeung, D.-Y., Wong, W.-k., & Woo, W.-c. (2015). Convolutional LSTM network: A machine learning approach for precipitation nowcasting. arXiv. https://arxiv.org/abs/1506.04214 <br>
