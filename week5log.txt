@@ -1,0 +1,78 @@
+﻿CAP6415_F25 PROJECT
+WEEK 5 LOG
+
+
+Project: Participate in Kaggle Competition “Google Research - Identify Contrails to Reduce Global Warming”
+
+
+
+
+From the previous week I decided to continue working with the 3D U-Net with the ConvLSTM because it had better results than a ViT in the bottle neck with a global dice of 0.52283. Now the way to improve it was to add attention gates in the decoder that could allow the model to suppress irrelevant regions (like clouds) in the skip connections from the encoder to the decoder and focus only on the targets (contrails) but got a worse result with global dice: 0.50911. I tried to improve the result with data augmentation with random rotation, color jitter and gaussian blur, but after training I got an even worse result with a global dice of 0.42265.
+
+
+I was stuck in between 0.4 - 0.5, so I tried not using the hard binary labels form human_pixel_masks.npy that is an array H x W x 1 containing the binary ground truth where a pixel is regarded as contrail pixel in evaluation if it is labeled as contrail by more than half of the labelers. And instead use the mean from the human_individual_masks.npy that is an array with size of H x W x 1 x R, where R is the number of people that label the image, which was something that some people did for the competition. So I trained the same 3D U-Net with the ConvLSTM model but got a worse result (Global Dice): 0.41288
+
+
+The last model I tried was adding a small spatial Transformer after the ConvLSTM in the bottle neck to capture global spatial context but got a worse result with a global dice of 0.42314.
+
+
+So finally I decided to go with the 3D U-Net + ConvLSTM. So first I trained the model for 15 epochs in the kaggle GPU T4 x2 which lasted approximately 6 hours. From there I exported the weights to a dataset, to use them as input for a submission notebook which had requirements like running a maximum of 9 hours, and internet off.
+
+
+So the last steps for this project were: recording the video with the code running and preparing every document and the repository for the project submission. 
+
+
+References
+
+
+[1] Chevallier, R., Shapiro, M., Engberg, Z., Soler, M., & Delahaye, D. (2023). Linear Contrails Detection, Tracking and Matching with Aircraft Using Geostationary Satellite and Air Traffic Data. Aerospace, 10(7), 578. https://doi.org/10.3390/aerospace10070578
+
+
+[2] Ng, J. Y.-H., McCloskey, K., Cui, J., Meijer, V. R., Brand, E., Sarna, A., Goyal, N., Van Arsdale, C., & Geraedts, S. (2023). OpenContrails: Benchmarking Contrail Detection on GOES-16 ABI. arXiv preprint arXiv:2304.02122. https://arxiv.org/abs/2304.02122
+
+
+[3] V. R. Meijer, L. Kulik, S. D. Eastham, F. Allroggen, R. L. Speth, S. Karaman, and S. R. Barrett, “Contrail coverage over the united states before and during the covid-19 pandemic,” Environmental Research Letters, vol. 17, no. 3, p. 034039, 2022. 
+
+
+[4] G. Zhang, J. Zhang, and J. Shang, “Contrail recognition with convolutional neural network and contrail parameterizations evaluation,” SOLA, vol. 14, pp. 132–137, 2018.
+
+
+[5] L.-C. Chen, G. Papandreou, F. Schroff, and H. Adam, “Rethinking atrous convolution for semantic image segmentation,” arXiv preprint arXiv:1706.05587, 2017.
+
+
+[6] L.-C. Chen, Y. Zhu, G. Papandreou, F. Schroff, and H. Adam, “Encoderdecoder with atrous separable convolution for semantic image segmentation,” in Proceedings of the European conference on computer vision (ECCV), 2018, pp. 801–818
+
+
+[7] L. Kulik, “Satellite-based detection of contrails using deep learning,” Ph.D. dissertation, Massachusetts Institute of Technology, 2019.
+
+
+[8] Csurka, G., Volpi, R., & Chidlovskii, B. (2023). Semantic image segmentation: Two decades of research. arXiv. https://arxiv.org/abs/2302.06378
+
+
+[9] Usharengaraju. (n.d.). SemanticSegmentationUsingViTs [Code notebook]. Kaggle. https://www.kaggle.com/code/usharengaraju/semanticsegmentationusingvits
+
+
+[10] Liu, T., Huang, J., & Weng, C. (2024). Spatio-temporal encoding and decoding-based method for future human activity skeleton synthesis. arXiv. https://arxiv.org/abs/2407.05573
+
+
+[11] TensorFlow Hub. (n.d.). Action recognition with TF-Hub [Tutorial]. TensorFlow. https://www.tensorflow.org/hub/tutorials/action_recognition_with_tf_hub 
+
+
+[12] TensorFlow. (n.d.). Image segmentation [Tutorial]. TensorFlow. https://www.tensorflow.org/tutorials/images/segmentation
+[13] Çiçek, Ö., Abdulkadir, A., Lienkamp, S. S., Brox, T., & Ronneberger, O. (2016). 3D U-Net: Learning dense volumetric segmentation from sparse annotation. arXiv. https://arxiv.org/abs/1606.06650
+[14] Ronneberger, O., Fischer, P., & Brox, T. (2015). U-Net: Convolutional networks for biomedical image segmentation. arXiv. https://arxiv.org/abs/1505.04597
+[15] Shi, X., Chen, Z., Wang, H., Yeung, D.-Y., Wong, W.-k., & Woo, W.-c. (2015). Convolutional LSTM network: A machine learning approach for precipitation nowcasting. arXiv. https://arxiv.org/abs/1506.04214
+[16] Naylor, P. (2018). 3D U-Net in PyTorch [Code repository]. GitHub. https://github.com/black0017/MedicalZooPytorch
+ (Structure inspiration for 3D U-Net encoder–decoder patterns.)
+[17] Aghdam, A. (2024). 3D-UNet (PyTorch implementation) [Code repository]. GitHub. https://github.com/amir-aghdam/3D-UNet
+[18] Wen, Q. (2020). ConvLSTM PyTorch implementation [Code repository]. GitHub.
+ https://github.com/ndrplz/ConvLSTM_pytorch
+[19] Kaggle. (2023). Identify contrails dataset utilities [Notebook]. Kaggle.
+https://www.kaggle.com/competitions/google-research-identify-contrails-to-reduce-global-warming
+[20] LearnOpenCV. (2020). 3D U-Net for BRATS: Implementation & Tutorial. LearnOpenCV. https://learnopencv.com/3d-u-net-brats/
+[21] Bertasius, G., Wang, H., & Torresani, L. (2021). Is Space-Time Attention All You Need for Video Understanding? (TimeSformer). arXiv:2102.05095. https://arxiv.org/abs/2102.05095
+[22] Arnab, A., Dehghani, M., et al. (2021). ViViT: A Video Vision Transformer. arXiv:2103.15691. https://arxiv.org/abs/2103.15691
+[23] Dosovitskiy, A., et al. (2021). An Image is Worth 16×16 Words: Transformers for Image Recognition at Scale (ViT). ICLR. https://arxiv.org/abs/2010.11929
+[24] Oktay, O., et al. (2018). Attention U-Net: Learning Where to Look for the Pancreas. arXiv preprint. https://arxiv.org/abs/1804.03999
+[25] LeeJunHyun. (n.d.). Image_Segmentation [GitHub repository]. https://github.com/LeeJunHyun/Image_Segmentation
+[26] Inversion. Ng, Joe. (2023). Contrails - RLE Submission [Source code]. Kaggle. https://www.kaggle.com/code/inversion/contrails-rle-submission
