@@ -88,6 +88,9 @@ The model was trained in an initial Kaggle noteebook for 15 epochs using the GPU
 https://www.kaggle.com/code/nicolashernandez1307/cap6415-contrail-project-training
 ### Submission Kaggle Notebook
 https://www.kaggle.com/code/nicolashernandez1307/cap6415-contrail-project-submission
+### Weights of Model Dataset
+https://www.kaggle.com/datasets/nicolashernandez1307/cap6415-contrail-weights
+
 ## Results
 ### Comparison of the different models tested
 Each one was trained for 8 epochs and evaluated using Global Dice Score. 
