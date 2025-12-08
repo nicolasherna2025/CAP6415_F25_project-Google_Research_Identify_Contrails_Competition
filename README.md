@@ -5,7 +5,47 @@ This repository contains the files for the final project for the course CAP6415_
 Train model for image segmentation to generate binary masks to identify which pixels have contrails. The competition is evaluated on the global Dice coefficient. The Dice coefficient can be used to compare the pixel-wise agreement between a predicted segmentation and its corresponding ground truth. 
 ## Data
 The dataset provided by the challenge consisted of geostationary satellite images retrieved from the GOES-16 Advanced Baseline Imager (ABI). Because contrails are easier to identify with temporal context, a sequence of images at 10-minute intervals are provided. Each example (record_id) contains exactly one labeled frame. The training folder has 20.5k folders representing record id, for each record id, there are 9 folders for each band (band_08 to band_16) and each band folder contains an array that represent sequences of 8 images of size 256x256 representing temporal context, like a video. Each record id also holds a human_pixel_masks.npy, which is a 256x25 array that is the per pixel binary ground truth The ground truth for the contrail detection was determined by 4+ different labelers annotating each image. Pixels were considered a contrail when >50% of the labelers annotated it as such.
-
+```
+train/
+    1000216489776414077/
+                      band_08.npy
+                      ...
+                      bans_16.npy
+                      human_individual_masks.npy
+                      human_pixel_masks.npy
+    1000603527582775543/
+                      band_08.npy
+                      ...
+                      bans_16.npy
+                      human_individual_masks.npy
+                      human_pixel_masks.npy
+    ...
+validation/
+    1000834164244036115/
+                      band_08.npy
+                      ...
+                      bans_16.npy
+                      human_pixel_masks.npy
+    1002653297254493116/
+                      band_08.npy
+                      ...
+                      bans_16.npy
+                      human_pixel_masks.npy
+    ...
+test/
+    1000834164244036115/
+                      band_08.npy
+                      ...
+                      bans_16.npy
+    1002653297254493116/
+                      band_08.npy
+                      ...
+                      bans_16.npy
+                      human_pixel_masks.npy
+sample_submission.csv
+train_metadata.json
+validation_metadata.json
+```
 ### Accessing Data
 To access the data first you have to accept the competition rules in https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/rules.
 #### Kaggle notebook
